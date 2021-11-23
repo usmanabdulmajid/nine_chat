@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:nine_chat/models/user.dart';
 import 'package:nine_chat/repository/user_repo.dart';
 import 'package:nine_chat/service/user/user_service_contract.dart';
@@ -7,6 +9,8 @@ class UserService implements IUserService {
   final SupabaseClient client;
   UserService(this.client);
   late RealtimeSubscription realtimeSub;
+  final StreamController<User> _userStream = StreamController<User>.broadcast();
+
   @override
   Future<bool> createUser(User user) async {
     final response = await client.from('user').insert(user.toJson()).execute();
@@ -18,19 +22,31 @@ class UserService implements IUserService {
   }
 
   @override
-  Future<List<User>> fetchUsers(String userId) {
-    // TODO: implement fetchUsers
-    throw UnimplementedError();
+  Future<List<User>> fetchUsers(String userId) async {
+    List<User> users = [];
+    final response =
+        await client.from('user').select("*").neq('user_id', userId).execute();
+    if (response.error != null) {
+      return <User>[];
+    }
+    users = (response.data as List).map((e) {
+      return User.fromJson(e);
+    }).toList();
+    return users;
   }
 
   @override
   Stream<User> user(String userId) {
-    // TODO: implement user
-    throw UnimplementedError();
+    realtimeSub = client.from('user').on(SupabaseEventTypes.insert, (payload) {
+      final user = User.fromJson(payload.newRecord!);
+      _userStream.sink.add(user);
+    }).subscribe();
+    return _userStream.stream;
   }
 
   @override
   void dispose() {
+    _userStream.close();
     client.removeSubscription(realtimeSub);
   }
 }
