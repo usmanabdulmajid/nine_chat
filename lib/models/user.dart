@@ -5,12 +5,14 @@ class User {
   String? username;
   String? email;
   String? password;
+  String? imageUrl;
   bool? online;
   User({
     this.id,
     this.username,
     this.email,
     this.password,
+    this.imageUrl,
     this.online,
   });
 
@@ -20,6 +22,7 @@ class User {
       'username': username,
       'email': email,
       'password': password,
+      'imageUrl': imageUrl,
       'online': online,
     };
   }
@@ -29,11 +32,13 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['id'],
-        username: json['username'],
-        email: json['email'],
-        password: json['password'],
-        online: json['online']);
+      id: json['id'],
+      username: json['username'],
+      email: json['email'],
+      password: json['password'],
+      imageUrl: json['imageUrl'],
+      online: json['online'],
+    );
   }
 
   factory User.fromSource(String source) => User.fromJson(jsonDecode(source));
@@ -43,6 +48,7 @@ class User {
     String? username,
     String? email,
     String? password,
+    String? imageUrl,
     bool? online,
   }) {
     return User(
@@ -50,6 +56,7 @@ class User {
       username: username ?? this.username,
       email: email ?? this.email,
       password: password ?? this.password,
+      imageUrl: imageUrl ?? this.imageUrl,
       online: online ?? this.online,
     );
   }
