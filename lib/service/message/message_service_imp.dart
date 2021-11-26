@@ -37,11 +37,31 @@ class MessageService implements IMessageService {
 
   @override
   Future<bool> send(Message message) async {
+    if (message.editId != null) await _editMessage(message);
+
     final response =
         await client.from('message').insert(message.toJson()).execute();
     if (response.error != null) {
       return false;
     }
+    return true;
+  }
+
+  Future<bool> _editMessage(Message message) async {
+    final response =
+        await client.from('message').update(message.toJson()).execute();
+    if (response.error != null) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<bool> replyMessageIndex(Message message) async {
+    if (message.editId != null) return await _editMessage(message);
+    final response =
+        await client.from('message').insert(message.toJson()).execute();
+    if (response.error != null) return false;
     return true;
   }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 class Message {
   int? id;
   int? editId;
+  int? replyIndex;
   String? from;
   String? to;
   String? content;
@@ -11,6 +12,7 @@ class Message {
   Message({
     this.id,
     this.editId,
+    this.replyIndex,
     this.from,
     this.to,
     this.content,
@@ -21,6 +23,7 @@ class Message {
     return {
       'id': id,
       'editId': editId,
+      'replyIndex': replyIndex,
       'from': from,
       'to': to,
       'content': content,
@@ -35,6 +38,7 @@ class Message {
     return Message(
         id: json['id'],
         editId: json['editId'],
+        replyIndex: json['replyIndex'],
         from: json['from'],
         to: json['to'],
         content: json['content'],
@@ -47,6 +51,7 @@ class Message {
   Message copywith({
     int? id,
     int? editId,
+    int? replyIndex,
     String? from,
     String? to,
     String? content,
@@ -55,6 +60,7 @@ class Message {
     return Message(
       id: id ?? this.id,
       editId: editId ?? this.editId,
+      replyIndex: replyIndex ?? this.replyIndex,
       from: from ?? this.from,
       to: to ?? this.to,
       content: content ?? this.content,

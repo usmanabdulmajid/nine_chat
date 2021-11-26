@@ -9,6 +9,7 @@ abstract class ILocalDb {
   Future<bool> updateMessage(Message message);
 
   Future<List<Chat>> searchChats(String chatName);
+  Future<bool> insertChat(Chat chat);
   Future<bool> insertChats(List<Chat> chats);
   Future<bool> deleteChats(List<String> chatId);
   Future<List<Chat>> fetchChats();
