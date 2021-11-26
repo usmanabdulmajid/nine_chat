@@ -28,7 +28,7 @@ class User {
   }
 
   @override
-  String toString() => jsonEncode(toString());
+  String toString() => jsonEncode(toJson());
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

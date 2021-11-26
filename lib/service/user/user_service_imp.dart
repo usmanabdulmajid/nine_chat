@@ -49,4 +49,12 @@ class UserService implements IUserService {
     _userStream.close();
     client.removeSubscription(realtimeSub);
   }
+
+  @override
+  Future<User?> fetchUser(String userId) async {
+    final response =
+        await client.from('users').select().eq('user_id', userId).execute();
+    if (response.error != null) return null;
+    return User.fromJson(response.data);
+  }
 }

@@ -5,7 +5,7 @@ class Cache implements ICache {
   final SharedPreferences _preference;
   Cache(this._preference);
   @override
-  Future<String?> fetch(String key) async {
+  String? fetch(String key) {
     if (!_preference.containsKey(key)) return null;
     return _preference.getString(key);
   }
@@ -23,5 +23,15 @@ class Cache implements ICache {
   @override
   Future<bool> save(String key, String value) {
     return _preference.setString(key, value);
+  }
+
+  @override
+  bool? fetchBool(String key) {
+    return _preference.getBool(key) ?? false;
+  }
+
+  @override
+  Future<bool> saveBool(String key, bool value) async {
+    return await _preference.setBool(key, value);
   }
 }
