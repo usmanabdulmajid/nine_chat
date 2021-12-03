@@ -33,6 +33,7 @@ class LocalSql implements ILocalDb {
       $from Text,
       $to Text,
       $date Text,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     )''');
 
     await db.execute('''CREATE TABLE $chatTable (
@@ -64,6 +65,11 @@ class LocalSql implements ILocalDb {
   @override
   Future<List<Chat>> fetchChats() async {
     final db = await this.db;
+    '''
+    SELECT * FROM $messageTable 
+    JOIN(MAX(created_at) maxtime, from from $messageTable group by from) recent
+    ON $messageTable.created_at = recent.maxtime AND $messageTable.from = recent.from
+    ''';
     List<Chat> chats = [];
     List<Map<String, dynamic>> rawChats = await db.query(chatTable);
     chats = rawChats.map((chat) => Chat.fromJson(chat)).toList();

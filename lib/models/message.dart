@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:nine_chat/utils/enums/message_status.dart';
+import 'package:nine_chat/utils/enums/message_type.dart';
+
 class Message {
   int? id;
   int? editId;
@@ -8,6 +11,8 @@ class Message {
   String? to;
   String? content;
   DateTime? date;
+  MessageType? messageType;
+  MessageStatus? messageStatus;
 
   Message({
     this.id,
@@ -17,6 +22,8 @@ class Message {
     this.to,
     this.content,
     this.date,
+    this.messageType,
+    this.messageStatus,
   });
 
   Map<String, dynamic> toJson() {
@@ -28,6 +35,8 @@ class Message {
       'to': to,
       'content': content,
       'date': date,
+      'messageType': messageType!.value(),
+      'messageStatus': messageStatus!.value(),
     };
   }
 
@@ -36,13 +45,16 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-        id: json['id'],
-        editId: json['editId'],
-        replyIndex: json['replyIndex'],
-        from: json['from'],
-        to: json['to'],
-        content: json['content'],
-        date: json['date']);
+      id: json['id'],
+      editId: json['editId'],
+      replyIndex: json['replyIndex'],
+      from: json['from'],
+      to: json['to'],
+      content: json['content'],
+      date: json['date'],
+      messageType: ParseMessageType.fromString(json['messageType']),
+      messageStatus: ParseMessageStatus.fromString(json['messageStatus']),
+    );
   }
 
   factory Message.fromSource(String source) =>
@@ -56,6 +68,8 @@ class Message {
     String? to,
     String? content,
     DateTime? date,
+    MessageType? messageType,
+    MessageStatus? messageStatus,
   }) {
     return Message(
       id: id ?? this.id,
@@ -65,6 +79,8 @@ class Message {
       to: to ?? this.to,
       content: content ?? this.content,
       date: date ?? this.date,
+      messageType: messageType ?? this.messageType,
+      messageStatus: messageStatus ?? this.messageStatus,
     );
   }
 }
