@@ -13,12 +13,7 @@ class Typing {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'from': from,
-      'to': to,
-      'typingEvent': typingEvent.value()
-    };
+    return {'id': id, 'from': from, 'to': to, 'typingEvent': typingEvent.name};
   }
 
   factory Typing.fromJson(Map<String, dynamic> json) {

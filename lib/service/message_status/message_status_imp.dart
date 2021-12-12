@@ -32,10 +32,8 @@ class MessageStatusService implements IMessageStatusService {
 
   @override
   Future<bool> send(MessageStatus messageStatus) async {
-    final response = await client
-        .from('messageStatus')
-        .insert(messageStatus.value())
-        .execute();
+    final response =
+        await client.from('messageStatus').insert(messageStatus.name).execute();
     if (response.error != null) return false;
     return true;
   }

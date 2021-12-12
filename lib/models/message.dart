@@ -35,8 +35,8 @@ class Message {
       'to': to,
       'content': content,
       'date': date,
-      'messageType': messageType!.value(),
-      'messageStatus': messageStatus!.value(),
+      'messageType': messageType!.name,
+      'messageStatus': messageStatus!.name,
     };
   }
 
