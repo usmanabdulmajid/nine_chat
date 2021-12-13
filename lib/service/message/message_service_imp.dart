@@ -41,9 +41,7 @@ class MessageService implements IMessageService {
 
     final response =
         await client.from('message').insert(message.toJson()).execute();
-    if (response.error != null) {
-      return false;
-    }
+    if (response.error != null) return false;
     return true;
   }
 
@@ -67,7 +65,7 @@ class MessageService implements IMessageService {
 
   @override
   void dispose() {
+    realtimeClient.remove(realtimeSub);
     _messageController.close();
-    realtimeSub.unsubscribe();
   }
 }

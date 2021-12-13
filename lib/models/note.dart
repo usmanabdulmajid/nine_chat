@@ -10,7 +10,7 @@ class Note {
   final NoteColor noteColor;
   final NoteFontType fontType;
   final DateTime duration;
-  final DateTime dateTime;
+  final DateTime date;
 
   Note({
     required this.id,
@@ -19,18 +19,18 @@ class Note {
     required this.noteColor,
     required this.fontType,
     required this.duration,
-    required this.dateTime,
+    required this.date,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'note': note,
-      'from': from,
+      'from': from.toString(),
       'noteColr': noteColor.name,
       'fontType': fontType.name,
       'duration': duration,
-      'dateTime': dateTime,
+      'dateTime': date,
     };
   }
 
@@ -38,11 +38,11 @@ class Note {
     return Note(
       id: json['id'],
       note: json['note'],
-      from: json['from'],
+      from: User.fromSource(json['from']),
       noteColor: NoteColorParser.fromString(json['noteColor']),
       fontType: NoteFontTypeParser.fromString(json['fontType']),
       duration: json['duration'],
-      dateTime: json['dateTime'],
+      date: json['dateTime'],
     );
   }
 }

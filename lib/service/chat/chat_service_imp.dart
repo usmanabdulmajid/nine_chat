@@ -25,7 +25,7 @@ class ChatService implements IChatService {
     final users = await iUserService.fetchUsers(user.id!);
     if (users.isEmpty) return false;
     chats = users.map((chat) {
-      var uid = Uuid().v4();
+      var uid = const Uuid().v4();
       return Chat(
         id: chat.id,
         chatName: chat.username,
@@ -36,10 +36,10 @@ class ChatService implements IChatService {
     final userResponse = await client.from('chats').insert(chats.map((chat) {
       return {
         'id': chat.id,
-        'user_id': user.id,
-        'chat_id': chat.chatId,
-        'chat_name': chat.chatName,
-        'image_url': chat.imageUrl,
+        'userId': user.id,
+        'chatId': chat.chatId,
+        'chatName': chat.chatName,
+        'imageUrl': chat.imageUrl,
       };
     })).execute();
     if (userResponse.error != null) {
@@ -47,11 +47,11 @@ class ChatService implements IChatService {
     }
     final chatsResponse = await client.from('chats').insert(chats.map((chat) {
       return {
-        'id': 1,
-        'user_id': chat.chatId,
-        'chat_id': user.id,
-        'chat_name': user.username,
-        'image_url': user.imageUrl,
+        'id': chat.id,
+        'userId': chat.chatId,
+        'chatId': user.id,
+        'chatName': user.username,
+        'imageUrl': user.imageUrl,
       };
     })).execute();
     if (chatsResponse.error != null) {

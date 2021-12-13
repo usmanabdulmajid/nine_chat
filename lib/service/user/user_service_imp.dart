@@ -14,9 +14,7 @@ class UserService implements IUserService {
   @override
   Future<bool> createUser(User user) async {
     final response = await client.from('user').insert(user.toJson()).execute();
-    if (response.error != null) {
-      return false;
-    }
+    if (response.error != null) return false;
     UserRepo.instance.user = user;
     return true;
   }

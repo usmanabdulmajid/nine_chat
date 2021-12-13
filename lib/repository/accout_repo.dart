@@ -21,6 +21,9 @@ abstract class IAccount {
   Future<bool> addNewChat(Chat chat);
   Future<bool> addNewMessage(Message message);
   Future<void> fetchRecentMessage(String userId);
+  Future<List<Chat>> loadChats();
+  Future<List<Message>> loadMessages(String chatId);
+  Future<void> logOut();
 }
 
 class Account implements IAccount {
@@ -74,8 +77,6 @@ class Account implements IAccount {
       user = User.fromSource(data);
     }
     UserRepo.instance.user = user;
-    fetchRecentChats(user.id!);
-    fetchRecentMessage(user.id!);
     return true;
   }
 
@@ -123,5 +124,21 @@ class Account implements IAccount {
     if (messages.isNotEmpty) {
       await iLocalDb.insertMessages(messages);
     }
+  }
+
+  @override
+  Future<List<Chat>> loadChats() async {
+    return await iLocalDb.fetchChats();
+  }
+
+  @override
+  Future<List<Message>> loadMessages(String chatId) async {
+    return await iLocalDb.fetchMessages(chatId);
+  }
+
+  @override
+  Future<void> logOut() async {
+    await client.auth.signOut();
+    await iCache.remove('session');
   }
 }

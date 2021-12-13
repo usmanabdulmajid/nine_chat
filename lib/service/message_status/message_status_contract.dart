@@ -1,4 +1,4 @@
-import 'package:nine_chat/utils/enums/message_status.dart';
+import 'package:nine_chat/models/message_status.dart';
 
 abstract class IMessageStatusService {
   Future<bool> send(MessageStatus messageStatus);

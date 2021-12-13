@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:nine_chat/models/message_status.dart';
 import 'package:nine_chat/service/message_status/message_status_contract.dart';
-import 'package:nine_chat/utils/enums/message_status.dart';
 import 'package:supabase/supabase.dart';
 
 class MessageStatusService implements IMessageStatusService {
@@ -23,7 +23,7 @@ class MessageStatusService implements IMessageStatusService {
     realtimeSub =
         realtimeClient.channel('realtime:public:messageStatus:to=$userId');
     realtimeSub.on('INSERT', (payload, {ref}) {
-      final messageStatus = ParseMessageStatus.fromString(payload['record']);
+      final messageStatus = MessageStatus.fromJson(payload['record']);
       _statusController.sink.add(messageStatus);
     });
 
@@ -32,8 +32,10 @@ class MessageStatusService implements IMessageStatusService {
 
   @override
   Future<bool> send(MessageStatus messageStatus) async {
-    final response =
-        await client.from('messageStatus').insert(messageStatus.name).execute();
+    final response = await client
+        .from('messageStatus')
+        .insert(messageStatus.toJson())
+        .execute();
     if (response.error != null) return false;
     return true;
   }
@@ -48,7 +50,7 @@ class MessageStatusService implements IMessageStatusService {
         .execute();
     if (response.error != null) return messageStatuses;
     messageStatuses = (response.data as List)
-        .map((element) => ParseMessageStatus.fromString(element))
+        .map((element) => MessageStatus.fromJson(element))
         .toList();
     return messageStatuses;
   }
